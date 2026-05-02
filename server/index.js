@@ -10,10 +10,7 @@ const File = require("./models/File");
 dotenv.config();
 const app = express();
 
-app.use(cors({
-    origin: "http://localhost:4000",
-}));
-
+app.use(cors({origin: "http://localhost:4000"}));
 dotenv.config();
 app.use(cors());
 app.use(express.json());
