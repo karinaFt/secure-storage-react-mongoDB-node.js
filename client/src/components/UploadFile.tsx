@@ -8,6 +8,25 @@ interface FileI {
     uploadedAt: string,
 }
 
+const fileButtonStyles = {
+    base: `
+    file:mr-4 
+    file:py-2 
+    file:px-4 
+    file:rounded-lg 
+    file:border-0 
+    file:font-medium 
+    file:cursor-pointer 
+    file:transition-colors
+  `,
+    outline: `
+    file:bg-transparent 
+    file:border-1 
+    file:border-green-300 
+    file:hover:bg-blue-50
+  `
+};
+
 const UploadFile = () => {
     const [file, setFile] = useState<File | null>(null);
     const [url, setUrl] = useState("");
@@ -34,8 +53,10 @@ const UploadFile = () => {
 
     return (
         <div>
-            <input type="file" onChange={(e) => setFile(e.target.files?.[0] || null)}/>
-            <p><button onClick={handleUpload}>Upload</button></p>
+            <input type="file" className={`${fileButtonStyles.base} ${fileButtonStyles.outline}`} onChange={(e) => setFile(e.target.files?.[0] || null)}/>
+            <button className={'bg-gr border-green-300 hover:bg-teal-50 hover:cursor-pointer font-bold py-2 px-4 border rounded'} onClick={handleUpload}>
+                Upload
+            </button>
 
             {url && (
                 <div>

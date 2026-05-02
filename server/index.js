@@ -17,7 +17,43 @@ app.use(express.json());
 
 connectDB();
 
-const upload = multer({dest: "uploads/"});
+const allowedMimeTypes = [
+    // images
+    "image/jpeg",
+    "image/png",
+    "image/webp",
+    "image/gif",
+
+    // documents
+    "application/pdf",
+    "text/plain",
+    "application/msword",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+
+    // audio
+    "audio/mpeg",
+    "audio/wav",
+
+    // video
+    "video/mp4",
+    "video/quicktime",
+    "video/webm",
+];
+
+const upload = multer({
+    dest: "uploads/",
+    limits: {
+        fileSize: 5 * 1024 * 1024, // 5MB
+    },
+
+    fileFilter: (req, file, cb) => {
+        if (allowedMimeTypes.includes(file.mimetype)) {
+            cb(null, true);
+        } else {
+            cb(new Error("Unsupported file type"));
+        }
+    }
+});
 
 cloudinary.config({
     cloud_name: process.env.CLOUD_NAME,
@@ -31,11 +67,15 @@ app.get("/", (req, res) => {
 
 app.post("/upload", upload.single("file"), async (req, res) => {
     try {
-        const result = await cloudinary.uploader.upload(req.file.path);
+        const result = await cloudinary.uploader.upload(req.file.path,  {
+            resource_type: "auto",
+        });
 
         const fileRecord = new File({
             originalName: req.file.originalname,
             url: result.secure_url,
+            mimetype: req.file.mimetype,
+            size: req.file.size,
         });
         await fileRecord.save();
 
