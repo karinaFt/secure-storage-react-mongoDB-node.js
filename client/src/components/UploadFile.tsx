@@ -1,12 +1,6 @@
 import {useEffect, useState} from "react";
 import axios from "axios";
-
-interface FileI {
-    _id: string,
-    originalName: string,
-    url: string,
-    uploadedAt: string,
-}
+import {FileCard, type FileItem} from "./FileCard.tsx";
 
 const fileButtonStyles = {
     base: `
@@ -53,38 +47,28 @@ const UploadFile = () => {
 
     return (
         <div>
-            <input type="file" className={`${fileButtonStyles.base} ${fileButtonStyles.outline}`} onChange={(e) => setFile(e.target.files?.[0] || null)}/>
-            <button className={'bg-gr border-green-300 hover:bg-teal-50 hover:cursor-pointer font-bold py-2 px-4 border rounded'} onClick={handleUpload}>
+            <input type="file" className={`${fileButtonStyles.base} ${fileButtonStyles.outline}`}
+                   onChange={(e) => setFile(e.target.files?.[0] || null)}/>
+            <button
+                className={'bg-gr border-green-300 hover:bg-teal-50 hover:cursor-pointer font-bold py-2 px-4 border rounded'}
+                onClick={handleUpload}>
                 Upload
             </button>
 
             {url && (
                 <div>
-                    <p>Uploaded:</p>
-                    <img src={url} alt="Uploaded" width={200}/>
+                    <p>Uploaded file: {url}</p>
                 </div>
             )}
 
-            {list && (
-                list.map((item:FileI) => {
-                    const date = new Date(item.uploadedAt).toLocaleTimeString('uk-UA', {
-                        day: 'numeric',
-                        month: 'long',
-                        year: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit'
-                    });
-
-                    return (
-                        <>
-                            <div key={item._id}>
-                                <img src={item.url} alt="" width={200}/>
-                                <p>{date}</p>
-                            </div>
-                        </>)
-                    }
-                )
-            )}
+            {list &&
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {list.map((file: FileItem) => (
+                        <FileCard
+                            key={file._id}
+                            file={file}/>
+                    ))}
+                </div>}
         </div>
     );
 };
