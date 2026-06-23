@@ -18,23 +18,19 @@ app.use(express.json());
 connectDB();
 
 const allowedMimeTypes = [
-    // images
     "image/jpeg",
     "image/png",
     "image/webp",
     "image/gif",
 
-    // documents
     "application/pdf",
     "text/plain",
     "application/msword",
     "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
 
-    // audio
     "audio/mpeg",
     "audio/wav",
 
-    // video
     "video/mp4",
     "video/quicktime",
     "video/webm",
@@ -43,7 +39,7 @@ const allowedMimeTypes = [
 const upload = multer({
     dest: "uploads/",
     limits: {
-        fileSize: 5 * 1024 * 1024, // 5MB
+        fileSize: 1024 * 1024, // 1MB
     },
 
     fileFilter: (req, file, cb) => {
@@ -80,7 +76,8 @@ app.post("/upload", upload.single("file"), async (req, res) => {
         await fileRecord.save();
 
         fs.unlinkSync(req.file.path);
-        res.json({url: result.secure_url});
+        res.json(fileRecord);
+        console.log('upload successfull');
     } catch (err) {
         console.error(err);
         res.status(500).json({message: "Upload failed"});
