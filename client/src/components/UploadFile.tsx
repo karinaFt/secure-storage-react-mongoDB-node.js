@@ -28,7 +28,7 @@ const UploadFile = () => {
         axios.get('http://localhost:4000/files')
             .then(res => setList(res.data))
             .catch(err => console.error("Upload error", err));
-    }, []);
+    }, [url]);
 
     const handleUpload = async () => {
         if (!file) return;
@@ -52,10 +52,12 @@ const UploadFile = () => {
                     className={'bg-gr border hover:cursor-pointer font-bold py-2 px-4 rounded'} onClick={handleUpload}>
                     Upload
                 </button>
+            </div>
 
-                {url && (
-                    <p>Uploaded file: {url}</p>
-                )}
+            <div className={'h-10'}>
+            {url && (
+                <p className={'text-xs'}>Uploaded file: {url}</p>
+            )}
             </div>
 
             {list &&

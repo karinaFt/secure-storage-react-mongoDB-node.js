@@ -1,3 +1,5 @@
+import { memo } from 'react';
+
 export interface FileItem {
     _id: string;
     originalName: string;
@@ -11,7 +13,7 @@ interface Props {
     file: FileItem;
 }
 
-export const FileCard = ({file}: Props) => {
+export const FileCard = memo(({file}: Props) => {
     const isImage = file.mimetype.startsWith("image/");
     const isVideo = file.mimetype.startsWith("video/");
     const isAudio = file.mimetype.startsWith("audio/");
@@ -61,4 +63,4 @@ export const FileCard = ({file}: Props) => {
             </p>
         </div>
     );
-};
+});
