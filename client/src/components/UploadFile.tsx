@@ -15,9 +15,7 @@ const fileButtonStyles = {
   `,
     outline: `
     file:bg-transparent 
-    file:border-1 
-    file:border-green-300 
-    file:hover:bg-blue-50
+    file:border-1
   `
 };
 
@@ -29,7 +27,7 @@ const UploadFile = () => {
     useEffect(() => {
         axios.get('http://localhost:4000/files')
             .then(res => setList(res.data))
-            .catch(err => console.error("Upload error",err));
+            .catch(err => console.error("Upload error", err));
     }, []);
 
     const handleUpload = async () => {
@@ -46,30 +44,27 @@ const UploadFile = () => {
     };
 
     return (
-        <div>
-            <input type="file" className={`${fileButtonStyles.base} ${fileButtonStyles.outline}`}
-                   onChange={(e) => setFile(e.target.files?.[0] || null)}/>
-            <button
-                className={'bg-gr border-green-300 hover:bg-teal-50 hover:cursor-pointer font-bold py-2 px-4 border rounded'}
-                onClick={handleUpload}>
-                Upload
-            </button>
+        <>
+            <div className='mb-4 flex justify-between'>
+                <input type="file" className={`${fileButtonStyles.base} ${fileButtonStyles.outline}`}
+                       onChange={(e) => setFile(e.target.files?.[0] || null)}/>
+                <button
+                    className={'bg-gr border hover:cursor-pointer font-bold py-2 px-4 rounded'} onClick={handleUpload}>
+                    Upload
+                </button>
 
-            {url && (
-                <div>
+                {url && (
                     <p>Uploaded file: {url}</p>
-                </div>
-            )}
+                )}
+            </div>
 
             {list &&
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {list.map((file: FileItem) => (
-                        <FileCard
-                            key={file._id}
-                            file={file}/>
+                        <FileCard key={file._id} file={file}/>
                     ))}
                 </div>}
-        </div>
+        </>
     );
 };
 

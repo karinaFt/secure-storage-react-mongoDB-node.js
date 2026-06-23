@@ -19,38 +19,29 @@ export const FileCard = ({file}: Props) => {
 
     return (
         <div className="border rounded p-3 w-72">
-            {/* IMAGE */}
             {isImage && (
                 <img src={file.url} alt={file.originalName} className="w-full h-48 object-cover"/>
             )}
-
-            {/* VIDEO */}
             {isVideo && (
                 <video controls className="w-full">
                     <source src={file.url} type={file.mimetype}/>
                 </video>
             )}
-
-            {/* AUDIO */}
             {isAudio && (
                 <audio controls className="w-full">
                     <source src={file.url} type={file.mimetype}/>
                 </audio>
             )}
-
-            {/* PDF */}
             {isPdf && (
                 <div>
                     <p>📄 PDF</p>
                     <a href={file.url} target="_blank" rel="noreferrer">Open PDF</a>
                 </div>
             )}
-
-            {/* DOC/DOCX/TXT */}
             {!isImage && !isVideo && !isAudio && !isPdf && (
                 <div>
-                    <p>📄 Doc</p>
-                    <a href={file.url} target="_blank" rel="noreferrer">Upload</a>
+                    <p className={'mb-2'}>📄 Doc</p>
+                    <a className={'font-bold'} href={file.url} target="_blank" rel="noreferrer">Upload</a>
                 </div>
             )}
             <hr/>
