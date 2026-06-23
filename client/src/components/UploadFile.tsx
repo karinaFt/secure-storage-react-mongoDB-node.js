@@ -30,7 +30,7 @@ const UploadFiles = ({setUploadedFiles}: Props) => {
         formData.append("file", file);
 
         try {
-            const res = await axios.post("http://localhost:4000/upload", formData);
+            const res = await axios.post("https://secure-storage-react-mongodb-node-js.onrender.com/upload", formData);
 
             setUploadedFiles(prev => [res.data, ...prev]);
         } catch (err) {

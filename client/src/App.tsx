@@ -8,7 +8,7 @@ export default function App() {
     const [uploadedFiles, setUploadedFiles] = useState<FileItem[]>([]);
 
     useEffect(() => {
-        axios.get('http://localhost:4000/files')
+        axios.get('https://secure-storage-react-mongodb-node-js.onrender.com/files')
             .then(res => setUploadedFiles(res.data))
             .catch(err => console.error("Upload error", err));
     }, []);
