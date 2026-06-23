@@ -12,6 +12,7 @@ const app = express();
 
 app.use(cors({origin: "http://localhost:4000"}));
 dotenv.config();
+app.use(cors( {origin: 'https://securesstorage.netlify.app'}));
 app.use(cors());
 app.use(express.json());
 
