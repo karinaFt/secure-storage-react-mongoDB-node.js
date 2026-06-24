@@ -22,7 +22,7 @@ export const FileCard = memo(({file}: Props) => {
     return (
         <div className="border rounded p-3 w-72">
             {isImage && (
-                <img src={file.url} alt={file.originalName} className="w-full h-48 object-cover"/>
+                <img src={file.url} alt={file.originalName} className="w-full h-48 mb-2 rounded object-cover"/>
             )}
             {isVideo && (
                 <video controls className="w-full">
@@ -44,9 +44,9 @@ export const FileCard = memo(({file}: Props) => {
                 <div>
                     <p className={'mb-2'}>📄 Doc</p>
                     <a className={'font-bold'} href={file.url} target="_blank" rel="noreferrer">Upload</a>
+                    <hr/>
                 </div>
             )}
-            <hr/>
 
             <h4 className={'mb-1'}>{file.originalName}</h4>
             <p className={'mb-2 text-xs'}>

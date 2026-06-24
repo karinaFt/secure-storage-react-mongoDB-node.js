@@ -6,17 +6,17 @@ import UploadFile from "./components/UploadFile.tsx";
 
 export default function App() {
     const [uploadedFiles, setUploadedFiles] = useState<FileItem[]>([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         axios.get('https://secure-storage-react-mongodb-node-js.onrender.com/files')
             .then(res => setUploadedFiles(res.data))
+            .finally(() => setLoading(false))
             .catch(err => console.error("Upload error", err));
     }, []);
 
-    console.log(uploadedFiles)
-
     return <div className={'m-5'}>
         <UploadFile setUploadedFiles={setUploadedFiles} />
-        <Gallery uploadedFiles={uploadedFiles}/>
+        <Gallery uploadedFiles={uploadedFiles} loading={loading}/>
     </div>
 }
