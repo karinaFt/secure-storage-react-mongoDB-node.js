@@ -4,12 +4,14 @@ import axios from "axios";
 import type {FileItem} from "./components/FileCard.tsx";
 import UploadFile from "./components/UploadFile.tsx";
 
+export const baseURL = "https://secure-storage-react-mongodb-node-js.onrender.com";
+
 export default function App() {
     const [uploadedFiles, setUploadedFiles] = useState<FileItem[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        axios.get('https://secure-storage-react-mongodb-node-js.onrender.com/files')
+        axios.get(`${baseURL}/files`)
             .then(res => setUploadedFiles(res.data))
             .finally(() => setLoading(false))
             .catch(err => console.error("Upload error", err));

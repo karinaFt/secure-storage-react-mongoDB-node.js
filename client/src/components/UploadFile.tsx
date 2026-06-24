@@ -1,6 +1,7 @@
 import {useState} from "react";
 import axios from "axios";
 import type {FileItem} from "./FileCard.tsx";
+import {baseURL} from "../App.tsx";
 
 const fileButtonStyles = {
     base: `
@@ -30,7 +31,7 @@ const UploadFiles = ({setUploadedFiles}: Props) => {
         formData.append("file", file);
 
         try {
-            const res = await axios.post("https://secure-storage-react-mongodb-node-js.onrender.com/upload", formData);
+            const res = await axios.post(`${baseURL}/upload`, formData);
 
             setUploadedFiles(prev => [res.data, ...prev]);
         } catch (err) {
