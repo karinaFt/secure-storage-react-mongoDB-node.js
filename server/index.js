@@ -53,7 +53,9 @@ const upload = multer({
         if (allowedMimeTypes.includes(file.mimetype)) {
             cb(null, true);
         } else {
-            cb(new Error("Unsupported file type"));
+            const err = new Error(`Unsupported file type ${file.mimetype}`);
+            err.code = "UNSUPPORTED_FILE_TYPE";
+            cb(err);
         }
     }
 });
@@ -69,28 +71,23 @@ app.get("/", (req, res) => {
 });
 
 app.post("/upload", upload.single("file"), async (req, res) => {
-    try {
-        const cloudinaryResult = await cloudinary.uploader.upload(req.file.path,  { //save to Cloudinary
-            resource_type: "auto",
-        });
+    const cloudinaryResult = await cloudinary.uploader.upload(req.file.path, { //save to Cloudinary
+        resource_type: "auto",
+    });
 
-        const fileRecordBD = new File({             //for mongo db
-            originalName: req.file.originalname,
-            url: cloudinaryResult.secure_url,
-            publicId: cloudinaryResult.public_id,
-            mimetype: req.file.mimetype,
-            size: req.file.size,
-        });
-        await fileRecordBD.save();                                                          //save to bd
+    const fileRecordBD = new File({             //for mongo db
+        originalName: req.file.originalname,
+        url: cloudinaryResult.secure_url,
+        publicId: cloudinaryResult.public_id,
+        mimetype: req.file.mimetype,
+        size: req.file.size,
+    });
+    await fileRecordBD.save();                                                          //save to bd
 
-        fs.unlinkSync(req.file.path);
-        res.json(fileRecordBD);
+    fs.unlinkSync(req.file.path);
+    res.json(fileRecordBD);
 
-        console.log('🚀Upload successfully');
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({message: "Upload failed"});
-    }
+    console.log('🚀Upload successfully');
 });
 
 app.get("/files", async (req, res) => {
@@ -112,8 +109,6 @@ app.delete("/files/:id", async (req, res) => {
             });
         }
 
-        console.log(file, 'file')
-
         await cloudinary.uploader.destroy(          //cloudinary delete
             file.publicId,
         );
@@ -134,6 +129,29 @@ app.delete("/files/:id", async (req, res) => {
             message: "Delete failed",
         });
     }
+});
+
+app.use((err, req, res, next) => {
+    console.log("ERROR:", err);
+
+    if (err.code === "UNSUPPORTED_FILE_TYPE") {
+        return res.status(400).json({
+            code: err.code,
+            message: err.message,
+        });
+    }
+
+    if (err.name === "MulterError") {
+        return res.status(400).json({
+            code: "MULTER_ERROR",
+            message: err.message,
+        });
+    }
+
+    return res.status(500).json({
+        code: "INTERNAL_ERROR",
+        message: "Something went wrong",
+    });
 });
 
 const PORT = process.env.PORT || 4000;

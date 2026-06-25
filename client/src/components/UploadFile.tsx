@@ -25,19 +25,32 @@ interface Props {
 const UploadFiles = ({setGalleryFiles}: Props) => {
     const [file, setFile] = useState<File | null>(null);
     const [uploading, setUploading] = useState(false);
+    const [progress, setProgress] = useState(0);
 
     const handleUpload = async () => {
         if (!file) return;
         const formData = new FormData();
         formData.append("file", file);
 
+        setProgress(0)
         setUploading(true);
 
         try {
-            const res = await axios.post(`${baseURL}/upload`, formData);
+            const res = await axios.post(`${baseURL}/upload`, formData, {
+                    onUploadProgress: event => {
+                        const percent = Math.round((event.loaded * 100) / (event.total ?? 1));
+
+                        setProgress(percent)
+                    }
+                }
+            );
 
             setGalleryFiles(prevFiles => [res.data, ...prevFiles]);
         } catch (err) {
+            if (axios.isAxiosError(err)) {
+                console.log(err.response?.data.code);
+                alert(err.response?.data.message);
+            }
             console.error("Upload error", err);
         } finally {
             setUploading(false)
@@ -45,13 +58,16 @@ const UploadFiles = ({setGalleryFiles}: Props) => {
     }
 
     return (
-        <div className='mb-4 flex justify-between'>
+        <div className='mb-4 flex justify-between items-baseline'>
             <input type="file" className={`${fileButtonStyles.base} ${fileButtonStyles.outline}`}
                    onChange={(e) => setFile(e.target.files?.[0] || null)}/>
 
-            <button disabled={uploading} className={'border hover:cursor-pointer font-bold py-2 px-4 rounded'} onClick={handleUpload}>
+            <div className={'flex flex-col items-end'}>
+            <button disabled={uploading} className={'border hover:cursor-pointer font-bold py-2 px-4 rounded mb-1'} onClick={handleUpload}>
                 {uploading ? "Uploading..." : "Upload"}
             </button>
+            <div><progress value={progress} max="100"/>  {progress}%</div>
+            </div>
         </div>
     );
 };
