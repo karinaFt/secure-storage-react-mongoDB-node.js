@@ -9,16 +9,14 @@ const File = require("./models/File");
 
 const app = express();
 
-app.use(
-    cors({
-        origin: [
-            "http://localhost:5173",
-            "http://localhost:4000",
-            "https://securesstorage.netlify.app",
-        ],
-    })
-);
-app.use(cors());
+app.use(cors({
+    origin: [
+        "http://localhost:5173",
+        "http://localhost:4000",
+        "https://securesstorage.netlify.app"
+    ],
+    methods: ["GET", "POST", "DELETE", "PUT", "OPTIONS"],
+}));
 dotenv.config();
 app.use(express.json());
 
