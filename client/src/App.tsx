@@ -13,8 +13,8 @@ export default function App() {
     useEffect(() => {
         axios.get(`${baseURL}/files`)
             .then(res => setGalleryFiles(res.data))
-            .finally(() => setLoading(false))
-            .catch(err => console.error("Upload error", err));
+            .catch(err => console.error("Upload error", err))
+            .finally(() => setLoading(false));
     }, []);
 
     const handleDelete = useCallback(
@@ -27,11 +27,9 @@ export default function App() {
                 )
             } catch (error) {
                 console.error(error);
-
                 alert("Failed to delete file");
             }
-        },
-        []
+        }, []
     );
 
     return <div className={'m-5'}>

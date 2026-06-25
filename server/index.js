@@ -70,21 +70,21 @@ app.get("/", (req, res) => {
 
 app.post("/upload", upload.single("file"), async (req, res) => {
     try {
-        const result = await cloudinary.uploader.upload(req.file.path,  {
+        const cloudinaryResult = await cloudinary.uploader.upload(req.file.path,  { //save to Cloudinary
             resource_type: "auto",
         });
 
-        const fileRecord = new File({
+        const fileRecordBD = new File({             //for mongo db
             originalName: req.file.originalname,
-            url: result.secure_url,
-            publicId: result.public_id,
+            url: cloudinaryResult.secure_url,
+            publicId: cloudinaryResult.public_id,
             mimetype: req.file.mimetype,
             size: req.file.size,
         });
-        await fileRecord.save();
+        await fileRecordBD.save();                                                          //save to bd
 
         fs.unlinkSync(req.file.path);
-        res.json(fileRecord);
+        res.json(fileRecordBD);
 
         console.log('🚀Upload successfully');
     } catch (err) {
