@@ -7,13 +7,19 @@ const cors = require("cors");
 const connectDB = require("./db");
 const File = require("./models/File");
 
-dotenv.config();
 const app = express();
 
-app.use(cors({origin: "http://localhost:4000"}));
-dotenv.config();
-app.use(cors( {origin: 'https://securesstorage.netlify.app'}));
+app.use(
+    cors({
+        origin: [
+            "http://localhost:5173",
+            "http://localhost:4000",
+            "https://securesstorage.netlify.app",
+        ],
+    })
+);
 app.use(cors());
+dotenv.config();
 app.use(express.json());
 
 connectDB();
@@ -71,6 +77,7 @@ app.post("/upload", upload.single("file"), async (req, res) => {
         const fileRecord = new File({
             originalName: req.file.originalname,
             url: result.secure_url,
+            publicId: result.public_id,
             mimetype: req.file.mimetype,
             size: req.file.size,
         });
@@ -78,7 +85,8 @@ app.post("/upload", upload.single("file"), async (req, res) => {
 
         fs.unlinkSync(req.file.path);
         res.json(fileRecord);
-        console.log('upload successfull');
+
+        console.log('🚀Upload successfully');
     } catch (err) {
         console.error(err);
         res.status(500).json({message: "Upload failed"});
@@ -91,6 +99,40 @@ app.get("/files", async (req, res) => {
         res.json(files);
     } catch (err) {
         res.status(500).json({message: "Failed to fetch files"});
+    }
+});
+
+app.delete("/files/:id", async (req, res) => {
+    try {
+        const file = await File.findById(req.params.id);
+
+        if (!file) {
+            return res.status(404).json({
+                message: "File not found",
+            });
+        }
+
+        console.log(file, 'file')
+
+        await cloudinary.uploader.destroy(          //cloudinary delete
+            file.publicId,
+        );
+
+        await File.findByIdAndDelete(               //mongo delete
+            req.params.id
+        );
+
+        res.json({
+            success: true,
+        });
+
+        console.log(`🚀 File deleted successfully`);
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+            message: "Delete failed",
+        });
     }
 });
 

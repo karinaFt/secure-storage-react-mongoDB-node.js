@@ -4,10 +4,10 @@ import {SkeletonCard} from "./SkeletonCard.tsx";
 interface Props {
     uploadedFiles: FileItem[];
     loading: boolean;
+    handleDelete: (id: string) => void;
 }
 
-const Gallery = ({uploadedFiles, loading}: Props) => {
-
+const Gallery = ({uploadedFiles, loading, handleDelete}: Props) => {
     const html = loading ?
         <>
             {Array.from({length: 9}).map((_, index) => (
@@ -17,7 +17,7 @@ const Gallery = ({uploadedFiles, loading}: Props) => {
         :
         <>
             {uploadedFiles.map((file: FileItem) => (
-                <FileCard key={file._id} file={file}/>
+                <FileCard handleDelete={handleDelete} key={file._id} file={file}/>
             ))}
         </>
 

@@ -19,10 +19,10 @@ const fileButtonStyles = {
 };
 
 interface Props {
-    setUploadedFiles: React.Dispatch<React.SetStateAction<FileItem[]>>;
+    setGalleryFiles: React.Dispatch<React.SetStateAction<FileItem[]>>;
 }
 
-const UploadFiles = ({setUploadedFiles}: Props) => {
+const UploadFiles = ({setGalleryFiles}: Props) => {
     const [file, setFile] = useState<File | null>(null);
 
     const handleUpload = async () => {
@@ -33,7 +33,7 @@ const UploadFiles = ({setUploadedFiles}: Props) => {
         try {
             const res = await axios.post(`${baseURL}/upload`, formData);
 
-            setUploadedFiles(prev => [res.data, ...prev]);
+            setGalleryFiles(prevFiles => [res.data, ...prevFiles]);
         } catch (err) {
             console.error("Upload error", err);
         }
@@ -43,10 +43,8 @@ const UploadFiles = ({setUploadedFiles}: Props) => {
         <div className='mb-4 flex justify-between'>
             <input type="file" className={`${fileButtonStyles.base} ${fileButtonStyles.outline}`}
                    onChange={(e) => setFile(e.target.files?.[0] || null)}/>
-            <button
-                className={'bg-gr border hover:cursor-pointer font-bold py-2 px-4 rounded'} onClick={handleUpload}>
-                Upload
-            </button>
+
+            <button className={'border hover:cursor-pointer font-bold py-2 px-4 rounded'} onClick={handleUpload}>Upload</button>
         </div>
     );
 };
