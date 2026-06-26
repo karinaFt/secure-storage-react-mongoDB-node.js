@@ -30,14 +30,14 @@ const UploadFiles = ({setGalleryFiles}: Props) => {
         if (!file) return;
         const formData = new FormData();
         formData.append("file", file);
-        
+
         setUploading(true);
 
         try {
-            const res = await axios.post(`${baseURL}/upload`, formData
-            );
+            const res = await axios.post(`${baseURL}/upload`, formData);
 
             setGalleryFiles(prevFiles => [res.data, ...prevFiles]);
+            console.log('res.data', res.data);
         } catch (err) {
             if (axios.isAxiosError(err)) {
                 console.log(err.response?.data.code);

@@ -73,6 +73,8 @@ app.post("/upload", upload.single("file"), async (req, res) => {
         resource_type: "auto",
     });
 
+    console.log('(cloudinaryResult', cloudinaryResult)
+    console.log('req.file', req.file);
     const fileRecordBD = new File({             //for mongo db
         originalName: req.file.originalname,
         url: cloudinaryResult.secure_url,
@@ -81,7 +83,7 @@ app.post("/upload", upload.single("file"), async (req, res) => {
         size: req.file.size,
     });
     await fileRecordBD.save();                                                          //save to bd
-
+    console.log(fileRecordBD, 'fileRecordBD')
     fs.unlinkSync(req.file.path);
     res.json(fileRecordBD);
 
