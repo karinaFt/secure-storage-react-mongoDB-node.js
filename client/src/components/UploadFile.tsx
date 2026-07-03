@@ -35,9 +35,8 @@ const UploadFiles = ({setGalleryFiles}: Props) => {
 
         try {
             const res = await axios.post(`${baseURL}/upload`, formData);
-
+            setFile(null);
             setGalleryFiles(prevFiles => [res.data, ...prevFiles]);
-            console.log('res.data', res.data);
         } catch (err) {
             if (axios.isAxiosError(err)) {
                 console.log(err.response?.data.code);
@@ -53,9 +52,8 @@ const UploadFiles = ({setGalleryFiles}: Props) => {
         <div className='mb-4 flex justify-between items-baseline'>
             <input type="file" className={`${fileButtonStyles.base} ${fileButtonStyles.outline}`}
                    onChange={(e) => setFile(e.target.files?.[0] || null)}/>
-
             <div className={'flex flex-col items-end'}>
-            <button disabled={uploading} className={'border hover:cursor-pointer font-bold py-2 px-4 rounded mb-1'} onClick={handleUpload}>
+            <button disabled={uploading || !file}  onClick={handleUpload} type={'button'} className={'border hover:cursor-pointer font-bold py-2 px-4 rounded mb-1 disabled:text-gray-500'}>
                 {uploading ? "Uploading..." : "Upload"}
             </button>
             </div>

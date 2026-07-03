@@ -26,6 +26,8 @@ export default function App() {
                 setGalleryFiles(prevFiles =>
                     prevFiles.filter(file => file._id !== id)
                 )
+
+                console.log(uploadedFiles, 'uploadedFiles')
             } catch (error) {
                 console.error(error);
                 alert("Failed to delete file");

@@ -9,14 +9,12 @@ interface Props {
 
 const Gallery = ({uploadedFiles, loading, handleDelete}: Props) => {
     const html = loading ?
-        <>
-            {Array.from({length: 9}).map((_, index) => (
+        <>{Array.from({length: 9}).map((_, index) => (
                 <SkeletonCard key={index}/>
             ))}
         </>
         :
-        <>
-            {uploadedFiles.map((file: FileItem) => (
+        <>{uploadedFiles.map((file: FileItem) => (
                 <FileCard handleDelete={handleDelete} key={file._id} file={file}/>
             ))}
         </>
