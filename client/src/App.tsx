@@ -21,7 +21,7 @@ export default function App() {
     const handleDelete = useCallback(
         async (id: string) => {
             try {
-                await axios.delete(`http://localhost:4000/files/${id}`);
+                await axios.delete(`${baseURL}/files/${id}`);
 
                 setGalleryFiles(prevFiles =>
                     prevFiles.filter(file => file._id !== id)
