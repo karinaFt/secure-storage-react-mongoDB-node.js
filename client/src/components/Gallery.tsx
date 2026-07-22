@@ -15,7 +15,7 @@ const Gallery = ({uploadedFiles, loading, handleDelete}: Props) => {
         </>
         :
         <>{uploadedFiles.map((file: FileItem) => (
-                <FileCard handleDelete={handleDelete} key={file._id} file={file}/>
+                <FileCard handleDelete={handleDelete} key={file.publicId} file={file}/>
             ))}
         </>
 

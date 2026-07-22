@@ -20,10 +20,13 @@ export default function App() {
 
     const handleDelete = useCallback(
         async (id: string) => {
+            const confirmed = window.confirm("Are you sure you want to delete this file?");
+            if (!confirmed) {return;}
+
             try {
                 await axios.delete(`${baseURL}/files/${id}`);
 
-                setGalleryFiles(prevFiles => prevFiles.filter(file => file._id !== id))
+                setGalleryFiles(prevFiles => prevFiles.filter(file => file._id !== id));
             } catch (error) {
                 console.error(error);
                 alert("Failed to delete file");
