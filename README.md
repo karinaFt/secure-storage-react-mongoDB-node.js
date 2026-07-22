@@ -51,6 +51,8 @@ MongoDB Atlas   Cloudinary
 - Loading skeletons while fetching data
 - Automatic gallery updates without page refresh
 
+![preview.png](client/src/images/preview.png)
+
 ## 📁 Supported File Types
 
 ### Images
