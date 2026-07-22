@@ -23,11 +23,7 @@ export default function App() {
             try {
                 await axios.delete(`${baseURL}/files/${id}`);
 
-                setGalleryFiles(prevFiles =>
-                    prevFiles.filter(file => file._id !== id)
-                )
-
-                console.log(uploadedFiles, 'uploadedFiles')
+                setGalleryFiles(prevFiles => prevFiles.filter(file => file._id !== id))
             } catch (error) {
                 console.error(error);
                 alert("Failed to delete file");

@@ -69,21 +69,23 @@ app.get("/", (req, res) => {
     res.send("Backend is working 🚀");
 });
 
-app.post("/upload", upload.single("file"), async (req, res) => {
-    const cloudinaryResult = await cloudinary.uploader.upload(req.file.path, { //save to Cloudinary
-        resource_type: "auto",
-    });
+app.post("/upload", upload.array("files", 10), async (req, res) => {
 
-    const fileRecordBD = new File({             //for mongo db
-        originalName: req.file.originalname,
-        url: cloudinaryResult.secure_url,
-        publicId: cloudinaryResult.public_id,
-        mimetype: req.file.mimetype,
-        size: req.file.size,
-    });
-    await fileRecordBD.save();                                                          //save to bd
+    const cloudinaryResult = await Promise.all(                         //save to Cloudinary
+        req.files.map(file => cloudinary.uploader.upload(file.path, {resource_type: "auto" })));
 
-    fs.unlinkSync(req.file.path);
+    const fileRecordBD = cloudinaryResult.map(                  //for mongo db
+        (result, index) => ({
+            originalName: req.files[index].originalname,
+            url: result.secure_url,
+            publicId: result.public_id,
+            mimetype: req.files[index].mimetype,
+            size: req.files[index].size,
+        })
+    );
+    const savedFiles = await File.insertMany(fileRecordBD);
+
+    //fs.unlinkSync(req.file.path);
     res.json(fileRecordBD);
 
     console.log('🚀Upload successfully');

@@ -1,42 +1,42 @@
-import {useState} from "react";
+import { useState} from "react";
 import axios from "axios";
 import type {FileItem} from "./FileCard.tsx";
 import {baseURL} from "../App.tsx";
-
-const fileButtonStyles = {
-    base: `
-    file:mr-4 
-    file:py-2 
-    file:px-4 
-    file:rounded-lg 
-    file:font-medium 
-    file:cursor-pointer 
-    file:transition-colors
-  `,
-    outline: `
-    file:border
-  `
-};
+import {useDropzone} from "react-dropzone";
 
 interface Props {
     setGalleryFiles: React.Dispatch<React.SetStateAction<FileItem[]>>;
 }
 
 const UploadFiles = ({setGalleryFiles}: Props) => {
-    const [file, setFile] = useState<File | null>(null);
+    const [file, setFile] = useState<File[] >([]);
     const [uploading, setUploading] = useState(false);
+    const {acceptedFiles, getRootProps, getInputProps} = useDropzone({
+        onDrop: (acceptedFiles) => {
+            setFile(prev => [...acceptedFiles, ...prev,]);
+        },
+    });
+
+    const files = acceptedFiles.map(file => (
+        <li key={file.path} className={'pb-2'}>
+            {file.path}
+            <p className={'text-xs'}>{file.size} bytes</p>
+        </li>
+    ));
 
     const handleUpload = async () => {
-        if (!file) return;
-        const formData = new FormData();
-        formData.append("file", file);
+        if (!files) return;
 
-        setUploading(true);
+        const formData = new FormData();
+        acceptedFiles.forEach(file => {
+            formData.append("files", file);
+            setUploading(true);
+        });
 
         try {
             const res = await axios.post(`${baseURL}/upload`, formData);
-            setFile(null);
-            setGalleryFiles(prevFiles => [res.data, ...prevFiles]);
+            setFile([]);
+            setGalleryFiles(prevFiles => [...res.data, ...prevFiles]);
         } catch (err) {
             if (axios.isAxiosError(err)) {
                 console.log(err.response?.data.code);
@@ -49,15 +49,24 @@ const UploadFiles = ({setGalleryFiles}: Props) => {
     }
 
     return (
-        <div className='mb-4 flex justify-between items-baseline'>
-            <input type="file" className={`${fileButtonStyles.base} ${fileButtonStyles.outline}`}
-                   onChange={(e) => setFile(e.target.files?.[0] || null)}/>
-            <div className={'flex flex-col items-end'}>
-            <button disabled={uploading || !file}  onClick={handleUpload} type={'button'} className={'border hover:cursor-pointer font-bold py-2 px-4 rounded mb-1 disabled:text-gray-500'}>
-                {uploading ? "Uploading..." : "Upload"}
-            </button>
+        <>
+            <div className="flex flex-col">
+                <div {...getRootProps({className: 'dropzone h-20 border border-gray-500 rounded mb-5'})}>
+                    <input {...getInputProps()}/>
+                    <p className={'text-gray-500 p-3'}>Drag 'n' drop some files here, or click to select files</p>
+                </div>
+
+                <ul>{files}</ul>
             </div>
-        </div>
+
+            <div className='mb-4 flex justify-between items-baseline'>
+                <div className={'flex flex-col items-end'}>
+                    <button disabled={uploading || !file} onClick={handleUpload} type={'button'} className={'border hover:cursor-pointer font-bold py-2 px-4 rounded mb-1 disabled:text-gray-500'}>
+                        {uploading ? "Uploading..." : "Upload"}
+                    </button>
+                </div>
+            </div>
+        </>
     );
 };
 
