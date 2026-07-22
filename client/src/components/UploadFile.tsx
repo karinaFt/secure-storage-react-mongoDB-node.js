@@ -9,20 +9,14 @@ interface Props {
 }
 
 const UploadFiles = ({setGalleryFiles}: Props) => {
-    const [file, setFile] = useState<File[] >([]);
+    const [files, setFiles] = useState<File[] >([]);
     const [uploading, setUploading] = useState(false);
+
     const {acceptedFiles, getRootProps, getInputProps} = useDropzone({
         onDrop: (acceptedFiles) => {
-            setFile(prev => [...acceptedFiles, ...prev,]);
+            setFiles(prev => [...acceptedFiles, ...prev,]);
         },
     });
-
-    const files = acceptedFiles.map(file => (
-        <li key={file.path} className={'pb-2'}>
-            {file.path}
-            <p className={'text-xs'}>{file.size} bytes</p>
-        </li>
-    ));
 
     const handleUpload = async () => {
         if (!files) return;
@@ -35,7 +29,7 @@ const UploadFiles = ({setGalleryFiles}: Props) => {
 
         try {
             const res = await axios.post(`${baseURL}/upload`, formData);
-            setFile([]);
+            setFiles([]);
             setGalleryFiles(prevFiles => [...res.data, ...prevFiles]);
         } catch (err) {
             if (axios.isAxiosError(err)) {
@@ -48,6 +42,13 @@ const UploadFiles = ({setGalleryFiles}: Props) => {
         }
     }
 
+    const filesList = acceptedFiles.map(file => (
+        <li key={file.path} className={'pb-2'}>
+            {file.path}
+            <p className={'text-xs'}>{file.size} bytes</p>
+        </li>
+    ));
+
     return (
         <>
             <div className="flex flex-col">
@@ -56,12 +57,12 @@ const UploadFiles = ({setGalleryFiles}: Props) => {
                     <p className={'text-gray-500 p-3'}>Drag 'n' drop some files here, or click to select files</p>
                 </div>
 
-                <ul>{files}</ul>
+                <ul>{filesList}</ul>
             </div>
 
             <div className='mb-4 flex justify-between items-baseline'>
                 <div className={'flex flex-col items-end'}>
-                    <button disabled={uploading || !file} onClick={handleUpload} type={'button'} className={'border hover:cursor-pointer font-bold py-2 px-4 rounded mb-1 disabled:text-gray-500'}>
+                    <button disabled={uploading || files.length === 0} onClick={handleUpload} type={'button'} className={'border hover:cursor-pointer font-bold py-2 px-4 rounded mb-1 disabled:text-gray-500'}>
                         {uploading ? "Uploading..." : "Upload"}
                     </button>
                 </div>
