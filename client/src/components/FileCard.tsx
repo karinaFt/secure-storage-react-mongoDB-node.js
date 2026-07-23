@@ -21,6 +21,16 @@ export const FileCard = memo(({file, handleDelete}: Props) => {
     const isAudio = file.mimetype.startsWith("audio/");
     const isPdf = file.mimetype === "application/pdf";
 
+    const copyLink = async () => {
+        try {
+            await navigator.clipboard.writeText(file.url);
+            alert("Link copied!");
+        } catch (error) {
+            console.error(error);
+            alert("Failed to copy link");
+        }
+    };
+
     return (
         <div className="border rounded p-3 w-72">
             {isImage && (
@@ -64,7 +74,16 @@ export const FileCard = memo(({file, handleDelete}: Props) => {
                 })}
             </p>
 
-            <button className={'border hover:cursor-pointer py-1 px-2 rounded'} onClick={() => handleDelete(file._id)}>Delete</button>
+            <div className='flex justify-between'>
+                <button className={'border hover:cursor-pointer py-1 px-2 rounded'} onClick={() => handleDelete(file._id)}>Delete</button>
+
+                <button onClick={copyLink} className="px-2 py-1 mx-3 hover:cursor-pointer">
+                    <span className="flex items-center">
+                        <svg className="w-4 h-4 me-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 4h3a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h3m0 3h6m-6 5h6m-6 4h6M10 3v4h4V3h-4Z"/></svg>
+                        <span className="text-xs font-semibold">Copy</span>
+                    </span>
+                </button>
+            </div>
         </div>
     );
 });
