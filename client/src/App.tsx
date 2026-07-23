@@ -8,7 +8,7 @@ import UploadFile from "./components/UploadFile.tsx";
 export const baseURL = "https://secure-storage-react-mongodb-node-js.onrender.com";
 
 export default function App() {
-    const [uploadedFiles, setGalleryFiles] = useState<FileItem[]>([]);
+    const [galleryFiles, setGalleryFiles] = useState<FileItem[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -36,6 +36,6 @@ export default function App() {
 
     return <div className={'m-5'}>
         <UploadFile setGalleryFiles={setGalleryFiles}/>
-        <Gallery handleDelete={handleDelete} uploadedFiles={uploadedFiles} loading={loading}/>
+        <Gallery handleDelete={handleDelete} galleryFiles={galleryFiles} loading={loading}/>
     </div>
 }
