@@ -31,13 +31,13 @@ const Gallery = ({galleryFiles, loading, handleDelete}: Props) => {
         </>
 
     return (
-        <>
-            <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search files..." className="border rounded p-2 mb-4 w-full"/>
+        <div className="pt-6">
+            <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search files..." className="border rounded p-2 mb-7 w-1/2"/>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {html}
             </div>
-        </>)
+        </div>)
 };
 
 export default Gallery;

@@ -61,7 +61,7 @@ export const FileCard = memo(({file, handleDelete}: Props) => {
             <p className={'mb-2 text-xs'}>
                 {(file.size / 1024).toFixed(2)} KB
             </p>
-            <p className={'text-xs mb-2'}>
+            <p className={'text-xs mb-5'}>
                 {new Date(file.uploadedAt).toLocaleTimeString('en-US', {
                     day: 'numeric',
                     month: 'long',

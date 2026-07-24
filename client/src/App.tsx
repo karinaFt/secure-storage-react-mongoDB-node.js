@@ -34,7 +34,7 @@ export default function App() {
         }, []
     );
 
-    return <div className={'m-5'}>
+    return <div className={'text-slate-900 p-7'}>
         <UploadFile setGalleryFiles={setGalleryFiles}/>
         <Gallery handleDelete={handleDelete} galleryFiles={galleryFiles} loading={loading}/>
     </div>
