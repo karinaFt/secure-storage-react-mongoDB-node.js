@@ -10,14 +10,34 @@ interface Props {
 
 const Gallery = ({galleryFiles, loading, handleDelete}: Props) => {
     const [search, setSearch] = useState("");
+    const [sortBy, setSortBy] = useState("newest");
 
     const filteredFiles = useMemo(() => {
-        return galleryFiles.filter(file =>
+
+        const filtered = galleryFiles.filter(file =>
             file.originalName
                 .toLowerCase()
                 .includes(search.toLowerCase())
         );
-    }, [galleryFiles, search]);
+
+        switch (sortBy) {
+            case "oldest":
+                return [...filtered].reverse();
+
+            case "name-asc":
+                return [...filtered].sort((a, b) =>
+                    a.originalName.localeCompare(b.originalName)
+                );
+
+            case "name-desc":
+                return [...filtered].sort((a, b) =>
+                    b.originalName.localeCompare(a.originalName)
+                );
+
+            default:
+                return filtered;
+        }
+    }, [galleryFiles, search, sortBy]);
 
     const html = loading ?
         <>{Array.from({length: 9}).map((_, index) => (
@@ -33,6 +53,13 @@ const Gallery = ({galleryFiles, loading, handleDelete}: Props) => {
     return (
         <div className="pt-6">
             <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search files..." className="border rounded p-2 mb-7 w-1/2"/>
+
+            <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="border rounded p-2 mx-6 px-5">
+                <option value="newest">Newest</option>
+                <option value="oldest">Oldest</option>
+                <option value="name-asc">Name A-Z</option>
+                <option value="name-desc">Name Z-A</option>
+            </select>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {html}
