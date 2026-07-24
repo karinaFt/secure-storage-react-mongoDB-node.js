@@ -41,26 +41,36 @@ MongoDB Atlas   Cloudinary
 
 ## ✨ Features
 
-- Upload multiple files at once
-- Drag & Drop file upload
-- Image, video, audio and document support
-- Cloudinary file storage
-- MongoDB file metadata storage
-- File preview by type
-- Delete files from Cloudinary and MongoDB
-- Delete confirmation dialog
-- Search files by name
-- Sort files by:
-    - Newest first
-    - Oldest first
-    - Name A-Z
-    - Name Z-A
-- Copy file URL to clipboard
-- Loading skeletons while fetching data
+### File Management
+- Multi-file upload
+- File deletion with confirmation
+- Automatic gallery refresh
+- Copy file links to clipboard
+
+### File Support
+- Images (JPG, PNG, GIF, WEBP, AVIF)
+- Documents (PDF, TXT, DOC, DOCX)
+- Audio (MP3, WAV)
+- Video (MP4, WEBM)
+
+### Search & Organization
+- Search files by filename
+- Sort by upload date
+- Sort alphabetically
+
+### User Experience
+- Drag & Drop uploads
+- Loading skeletons
+- Responsive UI
+
+### Backend
+- Cloudinary integration
+- MongoDB metadata storage
+- Custom error handling
 - File size validation
-- Custom backend error handling
-- Automatic gallery updates without page refresh
-- Responsive gallery layout
+
+### Performance
+- Optimized filtering with useMemo
 
 
 ![img_1.png](client/src/images/img_1.png)
