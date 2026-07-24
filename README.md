@@ -48,8 +48,20 @@ MongoDB Atlas   Cloudinary
 - MongoDB file metadata storage
 - File preview by type
 - Delete files from Cloudinary and MongoDB
+- Delete confirmation dialog
+- Search files by name
+- Sort files by:
+    - Newest first
+    - Oldest first
+    - Name A-Z
+    - Name Z-A
+- Copy file URL to clipboard
 - Loading skeletons while fetching data
+- File size validation
+- Custom backend error handling
 - Automatic gallery updates without page refresh
+- Responsive gallery layout
+
 
 ![img_1.png](client/src/images/img_1.png)
 
