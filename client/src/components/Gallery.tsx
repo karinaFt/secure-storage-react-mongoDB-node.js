@@ -11,14 +11,19 @@ interface Props {
 const Gallery = ({galleryFiles, loading, handleDelete}: Props) => {
     const [search, setSearch] = useState("");
     const [sortBy, setSortBy] = useState("newest");
+    const [filerByType, setFilerByType] = useState("/");
 
     const filteredFiles = useMemo(() => {
 
-        const filtered = galleryFiles.filter(file =>
-            file.originalName
-                .toLowerCase()
-                .includes(search.toLowerCase())
-        );
+        const filtered = galleryFiles
+            .filter(file =>
+                file.originalName
+                    .toLowerCase()
+                    .includes(search.toLowerCase())
+            )
+            .filter(file =>
+                file.mimetype
+                    .includes(filerByType));
 
         switch (sortBy) {
             case "oldest":
@@ -37,7 +42,7 @@ const Gallery = ({galleryFiles, loading, handleDelete}: Props) => {
             default:
                 return filtered;
         }
-    }, [galleryFiles, search, sortBy]);
+    }, [galleryFiles, search, sortBy, filerByType]);
 
     const html = loading ?
         <>{Array.from({length: 9}).map((_, index) => (
@@ -59,6 +64,17 @@ const Gallery = ({galleryFiles, loading, handleDelete}: Props) => {
                 <option value="oldest">Oldest</option>
                 <option value="name-asc">Name A-Z</option>
                 <option value="name-desc">Name Z-A</option>
+            </select>
+
+            <select value={filerByType} onChange={(e) => setFilerByType(e.target.value)} className="border rounded p-2 mx-6 px-5">
+                <option value="/">Type</option>
+                <option value="audio">Audio</option>
+                <option value="image">Images</option>
+                <option value="video">Video</option>
+                <option value="text">Doc</option>
+                <option value="pdf">PDF</option>
+                <option value="wordprocessingml.document">Microsoft Word</option>
+                <option value="presentationml.presentation">Presentation</option>
             </select>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 justify-items-center">

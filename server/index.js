@@ -33,6 +33,7 @@ const allowedMimeTypes = [
     "text/plain",
     "application/msword",
     "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "application/vnd.openxmlformats-officedocument.presentationml.presentation",
 
     "audio/mpeg",
     "audio/wav",
@@ -132,6 +133,7 @@ app.delete("/files/:id", async (req, res) => {
     }
 });
 
+//ERROR handling
 app.use((err, req, res, next) => {
     console.log("ERROR:", err);
 
@@ -151,7 +153,7 @@ app.use((err, req, res, next) => {
 
     return res.status(500).json({
         code: "INTERNAL_ERROR",
-        message: "Something went wrong",
+        message: err.message,
     });
 });
 
