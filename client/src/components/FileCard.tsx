@@ -28,6 +28,8 @@ export const FileCard = memo(({file, handleDelete}: Props) => {
         setTimeout(() => {setCopied(false)}, 2000);
     }
 
+    const fileNameSlice  = file.originalName.length > 28 ? `${file.originalName.slice(0,28)}...` : file.originalName;
+
     return (
         <div className="border rounded p-3 w-72">
             {isImage && (
@@ -57,10 +59,9 @@ export const FileCard = memo(({file, handleDelete}: Props) => {
                 </div>
             )}
 
-            <h4 className={'mb-1'}>{file.originalName}</h4>
-            <p className={'mb-2 text-xs'}>
-                {(file.size / 1024).toFixed(2)} KB
-            </p>
+            <h4 className={'mb-1'}>{fileNameSlice}</h4>
+            <p className={'mb-2 text-xs'}>{(file.size / 1024).toFixed(2)} KB</p>
+
             <p className={'text-xs mb-5'}>
                 {new Date(file.uploadedAt).toLocaleTimeString('en-US', {
                     day: 'numeric',

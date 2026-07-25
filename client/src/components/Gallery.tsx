@@ -61,7 +61,7 @@ const Gallery = ({galleryFiles, loading, handleDelete}: Props) => {
                 <option value="name-desc">Name Z-A</option>
             </select>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 justify-items-center">
                 {html}
             </div>
         </div>)
