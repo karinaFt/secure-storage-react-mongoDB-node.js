@@ -27,10 +27,9 @@ MongoDB Atlas   Cloudinary
 ### Frontend
 - React
 - TypeScript
-- Vite
 - Tailwind CSS
 - Axios
-- React Dropzone
+- Vite
 
 ### Backend
 - Node.js
@@ -72,8 +71,7 @@ MongoDB Atlas   Cloudinary
 ### Performance
 - Optimized filtering with useMemo
 
-
-![img_1.png](client/src/images/img_1.png)
+![img_1.png](img_1.png)
 
 ## 📁 Supported File Types
 
