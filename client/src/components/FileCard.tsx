@@ -28,51 +28,61 @@ export const FileCard = memo(({file, handleDelete}: Props) => {
         setTimeout(() => {setCopied(false)}, 2000);
     }
 
+    const handleRename = async () => {
+        const newName = window.prompt("Enter new file name", file.originalName);
+        if (!newName) {
+            return;
+        }
+    }
+
     const fileNameSlice  = file.originalName.length > 28 ? `${file.originalName.slice(0,28)}...` : file.originalName;
 
     return (
-        <div className="border rounded p-3 w-72">
-            {isImage && (
-                <img src={file.url} alt={file.originalName} className="w-full h-48 mb-2 rounded object-cover"/>
-            )}
-            {isVideo && (
-                <video controls className="w-full">
-                    <source src={file.url} type={file.mimetype}/>
-                </video>
-            )}
-            {isAudio && (
-                <audio controls className="w-full">
-                    <source src={file.url} type={file.mimetype}/>
-                </audio>
-            )}
-            {isPdf && (
-                <div>
-                    <p>📄 PDF</p>
-                    <a href={file.url} target="_blank" rel="noreferrer">Open PDF</a>
-                </div>
-            )}
-            {!isImage && !isVideo && !isAudio && !isPdf && (
-                <div>
-                    <p className={'mb-2'}>📄 Doc</p>
-                    <a className={'font-bold'} href={file.url} target="_blank" rel="noreferrer">Upload</a>
-                    <hr/>
-                </div>
-            )}
+        <div className="flex flex-col justify-items-stretch border rounded p-3 w-72">
+            <div className='h-full'>
+                {isImage && (
+                    <img src={file.url} alt={file.originalName} className="w-full h-48 mb-2 rounded object-cover"/>
+                )}
+                {isVideo && (
+                    <video controls className="w-full">
+                        <source src={file.url} type={file.mimetype}/>
+                    </video>
+                )}
+                {isAudio && (
+                    <audio controls className="w-full">
+                        <source src={file.url} type={file.mimetype}/>
+                    </audio>
+                )}
+                {isPdf && (
+                    <div>
+                        <p>📄 PDF</p>
+                        <a href={file.url} target="_blank" rel="noreferrer">Open PDF</a>
+                    </div>
+                )}
+                {!isImage && !isVideo && !isAudio && !isPdf && (
+                    <div>
+                        <p className={'mb-2'}>📄 Doc</p>
+                        <a className={'font-bold'} href={file.url} target="_blank" rel="noreferrer">Upload</a>
+                        <hr/>
+                    </div>
+                )}
 
-            <h4 className={'mb-1'}>{fileNameSlice}</h4>
-            <p className={'mb-2 text-xs'}>{(file.size / 1024).toFixed(2)} KB</p>
+                <h4 className={'mb-1'}>{fileNameSlice}</h4>
+                <p className={'mb-2 text-xs'}>{(file.size / 1024).toFixed(2)} KB</p>
 
-            <p className={'text-xs mb-5'}>
-                {new Date(file.uploadedAt).toLocaleTimeString('en-US', {
-                    day: 'numeric',
-                    month: 'long',
-                    year: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                })}
-            </p>
+                <p className={'text-xs mb-5'}>
+                    {new Date(file.uploadedAt).toLocaleTimeString('en-US', {
+                        day: 'numeric',
+                        month: 'long',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    })}
+                </p>
+            </div>
 
             <div className='flex justify-between'>
+                <button className={'border hover:cursor-pointer py-1 px-2 rounded'} onClick={handleRename}>Rename</button>
                 <button className={'border hover:cursor-pointer py-1 px-2 rounded'} onClick={() => handleDelete(file._id)}>Delete</button>
 
                 <button onClick={copyLink} className="px-2 py-1 mx-3 hover:cursor-pointer">

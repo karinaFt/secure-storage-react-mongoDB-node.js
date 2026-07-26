@@ -59,13 +59,6 @@ const Gallery = ({galleryFiles, loading, handleDelete}: Props) => {
         <div className="pt-6">
             <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search files..." className="border rounded p-2 mb-7 w-1/2"/>
 
-            <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="border rounded p-2 mx-6 px-5">
-                <option value="newest">Newest</option>
-                <option value="oldest">Oldest</option>
-                <option value="name-asc">Name A-Z</option>
-                <option value="name-desc">Name Z-A</option>
-            </select>
-
             <select value={filerByType} onChange={(e) => setFilerByType(e.target.value)} className="border rounded p-2 mx-6 px-5">
                 <option value="/">Type</option>
                 <option value="audio">Audio</option>
@@ -77,6 +70,13 @@ const Gallery = ({galleryFiles, loading, handleDelete}: Props) => {
                 <option value="presentationml.presentation">Presentation</option>
             </select>
 
+            <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="border rounded p-2 mx-6 px-5">
+                <option value="newest">Newest</option>
+                <option value="oldest">Oldest</option>
+                <option value="name-asc">Name A-Z</option>
+                <option value="name-desc">Name Z-A</option>
+            </select>
+            
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 justify-items-center">
                 {html}
             </div>
