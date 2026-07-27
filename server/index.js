@@ -15,7 +15,7 @@ app.use(cors({
         "http://localhost:4000",
         "https://securesstorage.netlify.app"
     ],
-    methods: ["GET", "POST", "DELETE", "PUT", "OPTIONS"],
+    methods: ["GET", "POST", "DELETE", "PUT", "PATCH", "OPTIONS"],
 }));
 dotenv.config();
 app.use(express.json());
@@ -98,6 +98,27 @@ app.get("/files", async (req, res) => {
         res.json(files);
     } catch (err) {
         res.status(500).json({message: "Failed to fetch files"});
+    }
+});
+
+app.patch("/files/:id", async (req, res) => {
+    try {
+        const id = req.params.id;
+        const originalName = req.body.originalName;
+        const updatedFile = await File.findByIdAndUpdate(id, {originalName}, {new: true});
+
+        if (!updatedFile) {
+            return res.status(404).json({
+                code: "FILE_NOT_FOUND",
+            });
+        }
+        res.json(updatedFile);
+
+    } catch (error) {
+        res.status(500).json({
+            code: "INTERNAL_ERROR",
+            message: error.message,
+        });
     }
 });
 

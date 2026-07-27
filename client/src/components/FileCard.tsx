@@ -13,9 +13,10 @@ export interface FileItem {
 interface Props {
     file: FileItem;
     handleDelete: (id: string) => void;
+    renameFile: (id: string, originalName: string | null) => void;
 }
 
-export const FileCard = memo(({file, handleDelete}: Props) => {
+export const FileCard = memo(({file, renameFile, handleDelete}: Props) => {
     const isImage = file.mimetype.startsWith("image/");
     const isVideo = file.mimetype.startsWith("video/");
     const isAudio = file.mimetype.startsWith("audio/");
@@ -31,8 +32,14 @@ export const FileCard = memo(({file, handleDelete}: Props) => {
     const handleRename = async () => {
         const newName = window.prompt("Enter new file name", file.originalName);
         if (!newName) {
+            alert("File name cannot be empty");
             return;
         }
+        if (newName === file.originalName) {
+            return;
+        }
+
+        renameFile(file._id, newName);
     }
 
     const fileNameSlice  = file.originalName.length > 28 ? `${file.originalName.slice(0,28)}...` : file.originalName;

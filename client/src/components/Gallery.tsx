@@ -1,14 +1,17 @@
 import {FileCard, type FileItem} from "./FileCard.tsx";
 import {SkeletonCard} from "./SkeletonCard.tsx";
-import {useMemo, useState} from "react";
+import {useCallback, useMemo, useState} from "react";
+import {baseURL} from "../App.tsx";
+import axios from "axios";
 
 interface Props {
     galleryFiles: FileItem[];
     loading: boolean;
     handleDelete: (id: string) => void;
+    setGalleryFiles:React.Dispatch<React.SetStateAction<FileItem[]>>;
 }
 
-const Gallery = ({galleryFiles, loading, handleDelete}: Props) => {
+const Gallery = ({galleryFiles, loading, handleDelete, setGalleryFiles}: Props) => {
     const [search, setSearch] = useState("");
     const [sortBy, setSortBy] = useState("newest");
     const [filerByType, setFilerByType] = useState("/");
@@ -44,6 +47,17 @@ const Gallery = ({galleryFiles, loading, handleDelete}: Props) => {
         }
     }, [galleryFiles, search, sortBy, filerByType]);
 
+    const renameFile = useCallback(async (id: string, originalName: string |  null) => {
+            try {
+                const res = await axios.patch(`${baseURL}/files/${id}`, {originalName});
+
+                setGalleryFiles(prevFiles => prevFiles.map(prevFile => prevFile._id === id ? res.data : prevFile));
+            } catch (error) {
+                console.error(error);
+            }
+        },[]
+    );
+
     const html = loading ?
         <>{Array.from({length: 9}).map((_, index) => (
                 <SkeletonCard key={index}/>
@@ -51,7 +65,7 @@ const Gallery = ({galleryFiles, loading, handleDelete}: Props) => {
         </>
         :
         <>{filteredFiles.map((file: FileItem) => (
-                <FileCard handleDelete={handleDelete} key={file.publicId} file={file}/>
+                <FileCard renameFile={renameFile} handleDelete={handleDelete} key={file.publicId} file={file}/>
             ))}
         </>
 
