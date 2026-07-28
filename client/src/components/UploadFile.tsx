@@ -1,14 +1,16 @@
 import { useState} from "react";
 import axios from "axios";
-import type {FileItem} from "./FileCard.tsx";
 import {baseURL} from "../App.tsx";
 import {useDropzone} from "react-dropzone";
+import type {FileItem} from "./FileCard.tsx";
 
 interface Props {
+    getFiles: () => Promise<void>;
+    setCurrentPage:React.Dispatch<React.SetStateAction<number>>;
     setGalleryFiles: React.Dispatch<React.SetStateAction<FileItem[]>>;
 }
 
-const UploadFiles = ({setGalleryFiles}: Props) => {
+const UploadFiles = ({getFiles, setCurrentPage}: Props) => {
     const [files, setFiles] = useState<File[] >([]);
     const [uploading, setUploading] = useState(false);
 
@@ -28,10 +30,11 @@ const UploadFiles = ({setGalleryFiles}: Props) => {
         });
 
         try {
-            const res = await axios.post(`${baseURL}/upload`, formData);
+            await axios.post(`${baseURL}/upload`, formData);
             setFiles([]);
 
-            setGalleryFiles(prevFiles => [...res.data, ...prevFiles]);
+            await getFiles();
+            setCurrentPage(1);
         } catch (err) {
             if (axios.isAxiosError(err)) {
                 console.log(err.response?.data.code);

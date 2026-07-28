@@ -9,9 +9,10 @@ interface Props {
     loading: boolean;
     handleDelete: (id: string) => void;
     setGalleryFiles:React.Dispatch<React.SetStateAction<FileItem[]>>;
+    getFiles: () => Promise<void>;
 }
 
-const Gallery = ({galleryFiles, loading, handleDelete, setGalleryFiles}: Props) => {
+const Gallery = ({galleryFiles, loading, handleDelete, getFiles}: Props) => {
     const [search, setSearch] = useState("");
     const [sortBy, setSortBy] = useState("newest");
     const [filerByType, setFilerByType] = useState("/");
@@ -49,13 +50,13 @@ const Gallery = ({galleryFiles, loading, handleDelete, setGalleryFiles}: Props) 
 
     const renameFile = useCallback(async (id: string, originalName: string |  null) => {
             try {
-                const res = await axios.patch(`${baseURL}/files/${id}`, {originalName});
+                await axios.patch(`${baseURL}/files/${id}`, {originalName});
+                await getFiles();
 
-                setGalleryFiles(prevFiles => prevFiles.map(prevFile => prevFile._id === id ? res.data : prevFile));
             } catch (error) {
                 console.error(error);
             }
-        },[]
+        },[getFiles]
     );
 
     const html = loading ?

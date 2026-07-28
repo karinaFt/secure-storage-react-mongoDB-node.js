@@ -13,15 +13,25 @@ export default function App() {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
 
-    useEffect(() => {
-        axios.get(`${baseURL}/files?page=${currentPage}&limit=8`)
-            .then(res => {
-                setGalleryFiles(res.data.files)
-                setTotalPages(res.data.totalPages);
-            })
-            .catch(err => console.error("Upload error", err))
-            .finally(() => setLoading(false));
+    const getFiles = useCallback(async () => {
+        try {
+            setLoading(true);
+
+            const res = await axios.get(`${baseURL}/files?page=${currentPage}&limit=9`);
+            setGalleryFiles(res.data.files);
+            setTotalPages(res.data.totalPages);
+
+            console.log(res.data, 'res.data')
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
     }, [currentPage]);
+
+    useEffect(() => {
+        getFiles()
+    }, [getFiles]);
 
     const handleDelete = useCallback(
         async (id: string) => {
@@ -31,17 +41,17 @@ export default function App() {
             try {
                 await axios.delete(`${baseURL}/files/${id}`);
 
-                setGalleryFiles(prevFiles => prevFiles.filter(file => file._id !== id));
+                await getFiles()
             } catch (error) {
                 console.error(error);
                 alert("Failed to delete file");
             }
-        }, []
+        }, [getFiles]
     );
 
     return <div className={'text-slate-900 p-7'}>
-        <UploadFile setGalleryFiles={setGalleryFiles}/>
-        <Gallery handleDelete={handleDelete} galleryFiles={galleryFiles} setGalleryFiles={setGalleryFiles} loading={loading}/>
+        <UploadFile getFiles={getFiles} setCurrentPage={setCurrentPage} setGalleryFiles={setGalleryFiles}/>
+        <Gallery getFiles={getFiles} handleDelete={handleDelete} galleryFiles={galleryFiles} setGalleryFiles={setGalleryFiles} loading={loading}/>
 
         <div className="flex gap-3 justify-center mt-10">
             <button disabled={currentPage === 1} onClick={() => setCurrentPage(prev => prev - 1)} className="font-bold hover:cursor-pointer">Previous</button>

@@ -65,6 +65,7 @@ MongoDB Atlas   Cloudinary
 ### Backend
 - Cloudinary integration
 - MongoDB metadata storage
+- Server-side pagination for efficient file browsing
 - Custom error handling
 - File size validation
 
