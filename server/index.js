@@ -94,10 +94,27 @@ app.post("/upload", upload.array("files", 10), async (req, res) => {
 
 app.get("/files", async (req, res) => {
     try {
-        const files = await File.find().sort({uploadedAt: -1});
-        res.json(files);
+        const page = Number(req.query.page) || 1;
+        const limit = Number(req.query.limit) || 8;
+        const skip = (page - 1) * limit;
+
+        const files = await File.find()
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit);
+
+        const totalFiles = await File.countDocuments();
+
+        res.json({
+            files,
+            totalFiles,
+            totalPages: Math.ceil(totalFiles / limit),
+            currentPage: page
+        });
     } catch (err) {
-        res.status(500).json({message: "Failed to fetch files"});
+        res.status(500).json({
+            message: "Failed to fetch files"
+        });
     }
 });
 

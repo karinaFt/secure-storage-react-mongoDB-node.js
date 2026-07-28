@@ -71,7 +71,7 @@ MongoDB Atlas   Cloudinary
 ### Performance
 - Optimized filtering with useMemo
 
-![img_1.png](img_1.png)
+![img.png](img.png)
 
 ## 📁 Supported File Types
 
