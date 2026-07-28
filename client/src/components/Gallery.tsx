@@ -71,9 +71,9 @@ const Gallery = ({galleryFiles, loading, handleDelete, setGalleryFiles}: Props) 
 
     return (
         <div className="pt-6">
-            <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search files..." className="border rounded p-2 mb-7 w-1/2"/>
+            <input type="text" name='search' value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search files..." className="border rounded p-2 mb-7 w-1/2"/>
 
-            <select value={filerByType} onChange={(e) => setFilerByType(e.target.value)} className="border rounded p-2 mx-6 px-5">
+            <select value={filerByType} name='filerByType' onChange={(e) => setFilerByType(e.target.value)} className="border rounded p-2 mx-6 px-5">
                 <option value="/">Type</option>
                 <option value="audio">Audio</option>
                 <option value="image">Images</option>
@@ -84,7 +84,7 @@ const Gallery = ({galleryFiles, loading, handleDelete, setGalleryFiles}: Props) 
                 <option value="presentationml.presentation">Presentation</option>
             </select>
 
-            <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="border rounded p-2 mx-6 px-5">
+            <select value={sortBy} name='sortBy' onChange={(e) => setSortBy(e.target.value)} className="border rounded p-2 mx-6 px-5">
                 <option value="newest">Newest</option>
                 <option value="oldest">Oldest</option>
                 <option value="name-asc">Name A-Z</option>

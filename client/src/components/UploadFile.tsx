@@ -30,6 +30,7 @@ const UploadFiles = ({setGalleryFiles}: Props) => {
         try {
             const res = await axios.post(`${baseURL}/upload`, formData);
             setFiles([]);
+
             setGalleryFiles(prevFiles => [...res.data, ...prevFiles]);
         } catch (err) {
             if (axios.isAxiosError(err)) {
