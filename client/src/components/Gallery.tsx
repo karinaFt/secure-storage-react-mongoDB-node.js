@@ -7,12 +7,11 @@ import axios from "axios";
 interface Props {
     galleryFiles: FileItem[];
     loading: boolean;
-    handleDelete: (id: string) => void;
     setGalleryFiles:React.Dispatch<React.SetStateAction<FileItem[]>>;
     getFiles: () => Promise<void>;
 }
 
-const Gallery = ({galleryFiles, loading, handleDelete, getFiles}: Props) => {
+const Gallery = ({galleryFiles, loading, getFiles}: Props) => {
     const [search, setSearch] = useState("");
     const [sortBy, setSortBy] = useState("newest");
     const [filerByType, setFilerByType] = useState("/");
@@ -59,16 +58,30 @@ const Gallery = ({galleryFiles, loading, handleDelete, getFiles}: Props) => {
         },[getFiles]
     );
 
+    const handleDelete = useCallback(
+        async (id: string) => {
+            const confirmed = window.confirm("Are you sure you want to delete this file?");
+            if (!confirmed) {return;}
+
+            try {
+                await axios.delete(`${baseURL}/files/${id}`);
+                await getFiles()
+
+            } catch (error) {
+                console.error(error);
+                alert("Failed to delete file");
+            }
+        }, [getFiles]
+    );
+
     const html = loading ?
         <>{Array.from({length: 9}).map((_, index) => (
                 <SkeletonCard key={index}/>
-            ))}
-        </>
+            ))}</>
         :
         <>{filteredFiles.map((file: FileItem) => (
                 <FileCard renameFile={renameFile} handleDelete={handleDelete} key={file.publicId} file={file}/>
-            ))}
-        </>
+            ))}</>
 
     return (
         <div className="pt-6">

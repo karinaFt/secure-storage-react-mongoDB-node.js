@@ -17,11 +17,9 @@ export default function App() {
         try {
             setLoading(true);
 
-            const res = await axios.get(`${baseURL}/files?page=${currentPage}&limit=9`);
+            const res = await axios.get(`${baseURL}/files?page=${currentPage}&limit=8`);
             setGalleryFiles(res.data.files);
             setTotalPages(res.data.totalPages);
-
-            console.log(res.data, 'res.data')
         } catch (error) {
             console.error(error);
         } finally {
@@ -33,25 +31,11 @@ export default function App() {
         getFiles()
     }, [getFiles]);
 
-    const handleDelete = useCallback(
-        async (id: string) => {
-            const confirmed = window.confirm("Are you sure you want to delete this file?");
-            if (!confirmed) {return;}
 
-            try {
-                await axios.delete(`${baseURL}/files/${id}`);
-
-                await getFiles()
-            } catch (error) {
-                console.error(error);
-                alert("Failed to delete file");
-            }
-        }, [getFiles]
-    );
 
     return <div className={'text-slate-900 p-7'}>
         <UploadFile getFiles={getFiles} setCurrentPage={setCurrentPage} setGalleryFiles={setGalleryFiles}/>
-        <Gallery getFiles={getFiles} handleDelete={handleDelete} galleryFiles={galleryFiles} setGalleryFiles={setGalleryFiles} loading={loading}/>
+        <Gallery getFiles={getFiles} galleryFiles={galleryFiles} setGalleryFiles={setGalleryFiles} loading={loading}/>
 
         <div className="flex gap-3 justify-center mt-10">
             <button disabled={currentPage === 1} onClick={() => setCurrentPage(prev => prev - 1)} className="font-bold hover:cursor-pointer">Previous</button>
