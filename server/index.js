@@ -97,13 +97,46 @@ app.get("/files", async (req, res) => {
         const page = Number(req.query.page) || 1;
         const limit = Number(req.query.limit) || 8;
         const skip = (page - 1) * limit;
+        const search = req.query.search || "";
+        const sort = req.query.sort || "newest";
+        const query = {};
 
-        const files = await File.find()
-            .sort({ createdAt: -1 })
+        if (search) {
+            query.originalName = {
+                $regex: search,
+                $options: "i"
+            };
+        }
+
+        let sortOption = {uploadedAt: -1};
+
+        if (sort === "newest") {
+            sortOption = {
+                uploadedAt: -1
+            };
+        }
+        if (sort === "oldest") {
+            sortOption = {
+                uploadedAt: 1
+            };
+        }
+        if (sort === "name-asc") {
+            sortOption = {
+                originalName: 1
+            };
+        }
+        if (sort === "name-desc") {
+            sortOption = {
+                originalName: -1
+            };
+        }
+
+        const files = await File.find(query)
+            .sort(sortOption)
             .skip(skip)
             .limit(limit);
 
-        const totalFiles = await File.countDocuments();
+        const totalFiles = await File.countDocuments(query);
 
         res.json({
             files,

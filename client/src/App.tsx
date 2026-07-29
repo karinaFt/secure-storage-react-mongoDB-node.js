@@ -12,12 +12,24 @@ export default function App() {
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+    const [search, setSearch] = useState("");
+    const [sortBy, setSortBy] = useState("newest");
 
     const getFiles = useCallback(async () => {
         try {
             setLoading(true);
 
-            const res = await axios.get(`${baseURL}/files?page=${currentPage}&limit=8`);
+            const res = await axios.get(`${baseURL}/files`,
+                {
+                    params: {
+                        page: currentPage,
+                        limit: 8,
+                        search,
+                        sort: sortBy
+                    }
+                }
+            );
+
             setGalleryFiles(res.data.files);
             setTotalPages(res.data.totalPages);
         } catch (error) {
@@ -25,17 +37,15 @@ export default function App() {
         } finally {
             setLoading(false);
         }
-    }, [currentPage]);
+    }, [currentPage, search, sortBy]);
 
     useEffect(() => {
         getFiles()
     }, [getFiles]);
 
-
-
     return <div className={'text-slate-900 p-7'}>
         <UploadFile getFiles={getFiles} setCurrentPage={setCurrentPage} setGalleryFiles={setGalleryFiles}/>
-        <Gallery getFiles={getFiles} galleryFiles={galleryFiles} setGalleryFiles={setGalleryFiles} loading={loading}/>
+        <Gallery getFiles={getFiles} galleryFiles={galleryFiles} loading={loading} search={search} setSearch={setSearch} sortBy={sortBy} setSortBy={setSortBy}/>
 
         <div className="flex gap-3 justify-center mt-10">
             <button disabled={currentPage === 1} onClick={() => setCurrentPage(prev => prev - 1)} className="font-bold hover:cursor-pointer">Previous</button>
