@@ -53,9 +53,11 @@ MongoDB Atlas   Cloudinary
 - Video (MP4, WEBM)
 
 ### Search & Organization
-- Search files by filename
-- Sort by upload date
-- Sort alphabetically
+- Server-side search by filename
+- Server-side sorting (date and name)
+- Server-side pagination for efficient file browsing
+- MongoDB query filtering
+- Debounced search input
 
 ### User Experience
 - Drag & Drop uploads
@@ -65,12 +67,12 @@ MongoDB Atlas   Cloudinary
 ### Backend
 - Cloudinary integration
 - MongoDB metadata storage
-- Server-side pagination for efficient file browsing
 - Custom error handling
 - File size validation
 
 ### Performance
-- Optimized filtering with useMemo
+- Debounced search requests
+- Optimized database queries with filtering, sorting and pagination
 
 ![img.png](img.png)
 
@@ -148,6 +150,7 @@ This project was created to practice:
 - REST API
 - MongoDB integration
 - Cloudinary integration
+- Server-side pagination, search, sorting and filtering
 - Error handling
 - React performance optimization
 - State management
