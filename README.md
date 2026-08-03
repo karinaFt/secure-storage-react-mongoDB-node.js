@@ -54,7 +54,7 @@ MongoDB Atlas   Cloudinary
 
 ### Search & Organization
 - Server-side search by filename
-- Server-side sorting (date and name)
+- Server-side sorting (date and name) & type filtering
 - Server-side pagination for efficient file browsing
 - MongoDB query filtering
 - Debounced search input

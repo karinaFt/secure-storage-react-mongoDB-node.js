@@ -15,6 +15,7 @@ export default function App() {
     const [search, setSearch] = useState("");
     const [sortBy, setSortBy] = useState("newest");
     const [debouncedSearch, setDebouncedSearch] = useState(search);
+    const [filterByType, setFilterByType] = useState("all");
 
     useEffect(() => {
         const timeout = setTimeout(() => {
@@ -33,7 +34,8 @@ export default function App() {
                         page: currentPage,
                         limit: 8,
                         search: debouncedSearch,
-                        sort: sortBy
+                        sort: sortBy,
+                        type: filterByType
                     }
                 }
             );
@@ -45,7 +47,7 @@ export default function App() {
         } finally {
             setLoading(false);
         }
-    }, [currentPage, debouncedSearch, sortBy]);
+    }, [currentPage, debouncedSearch, sortBy, filterByType]);
 
     useEffect(() => {
         getFiles()
@@ -53,7 +55,7 @@ export default function App() {
 
     return <div className={'text-slate-900 p-7'}>
         <UploadFile getFiles={getFiles} setCurrentPage={setCurrentPage} setGalleryFiles={setGalleryFiles}/>
-        <Gallery getFiles={getFiles} galleryFiles={galleryFiles} loading={loading} search={search} setSearch={setSearch} sortBy={sortBy} setSortBy={setSortBy}/>
+        <Gallery getFiles={getFiles} galleryFiles={galleryFiles} loading={loading} search={search} setSearch={setSearch} sortBy={sortBy} setSortBy={setSortBy} filterByType={filterByType} setFilterByType={setFilterByType} setCurrentPage={setCurrentPage}/>
 
         <div className="flex gap-3 justify-center mt-10">
             <button disabled={currentPage === 1} onClick={() => setCurrentPage(prev => prev - 1)} className="font-bold hover:cursor-pointer">Previous</button>

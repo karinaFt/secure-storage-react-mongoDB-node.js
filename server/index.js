@@ -100,11 +100,18 @@ app.get("/files", async (req, res) => {
         const search = req.query.search || "";
         const sort = req.query.sort || "newest";
         const query = {};
+        const type = req.query.type || "all";
 
         if (search) {
             query.originalName = {
                 $regex: search,
                 $options: "i"
+            };
+        }
+
+        if (type !== "all") {
+            query.mimetype = {
+                $regex: `^${type}`
             };
         }
 

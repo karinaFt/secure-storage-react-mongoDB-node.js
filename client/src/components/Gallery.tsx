@@ -12,9 +12,12 @@ interface Props {
     setSearch: React.Dispatch<React.SetStateAction<string>>,
     sortBy: string,
     setSortBy: React.Dispatch<React.SetStateAction<string>>,
+    filterByType: string,
+    setFilterByType: React.Dispatch<React.SetStateAction<string>>,
+    setCurrentPage: React.Dispatch<React.SetStateAction<number>>
 }
 
-const Gallery = ({galleryFiles, loading, getFiles, search, setSearch, sortBy, setSortBy}: Props) => {
+const Gallery = ({galleryFiles, loading, getFiles, search, setSearch, sortBy, setSortBy, filterByType, setFilterByType, setCurrentPage}: Props) => {
     const renameFile = useCallback(async (id: string, originalName: string |  null) => {
             try {
                 await axios.patch(`${baseURL}/files/${id}`, {originalName});
@@ -55,16 +58,16 @@ const Gallery = ({galleryFiles, loading, getFiles, search, setSearch, sortBy, se
         <div className="pt-6">
             <input type="text" name='search' value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search files..." className="border rounded p-2 mb-7 w-1/2"/>
 
-            {/*<select value={filerByType} name='filerByType' onChange={(e) => setFilerByType(e.target.value)} className="border rounded p-2 mx-6 px-5">*/}
-            {/*    <option value="/">Type</option>*/}
-            {/*    <option value="audio">Audio</option>*/}
-            {/*    <option value="image">Images</option>*/}
-            {/*    <option value="video">Video</option>*/}
-            {/*    <option value="text">Doc</option>*/}
-            {/*    <option value="pdf">PDF</option>*/}
-            {/*    <option value="wordprocessingml.document">Microsoft Word</option>*/}
-            {/*    <option value="presentationml.presentation">Presentation</option>*/}
-            {/*</select>*/}
+            <select value={filterByType} name='filerByType' onChange={(e) => {setFilterByType(e.target.value); setCurrentPage(1)}} className="border rounded p-2 mx-6 px-5">
+                <option value="all">Type</option>
+                <option value="audio">Audio</option>
+                <option value="image">Images</option>
+                <option value="video">Video</option>
+                <option value="text">Doc</option>
+                <option value="pdf">PDF</option>
+                <option value="wordprocessingml.document">Microsoft Word</option>
+                <option value="presentationml.presentation">Presentation</option>
+            </select>
 
             <select value={sortBy} name='sortBy' onChange={(e) => setSortBy(e.target.value)} className="border rounded p-2 mx-6 px-5">
                 <option value="newest">Newest</option>
@@ -72,7 +75,7 @@ const Gallery = ({galleryFiles, loading, getFiles, search, setSearch, sortBy, se
                 <option value="name-asc">Name A-Z</option>
                 <option value="name-desc">Name Z-A</option>
             </select>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 justify-items-center">
                 {html}
             </div>
