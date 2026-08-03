@@ -19,7 +19,7 @@ export default function App() {
     useEffect(() => {
         const timeout = setTimeout(() => {
             setDebouncedSearch(search);
-        }, 700);
+        }, 1500);
         return () => clearTimeout(timeout);
     }, [search]);
 
@@ -32,7 +32,7 @@ export default function App() {
                     params: {
                         page: currentPage,
                         limit: 8,
-                        debouncedSearch,
+                        search: debouncedSearch,
                         sort: sortBy
                     }
                 }
