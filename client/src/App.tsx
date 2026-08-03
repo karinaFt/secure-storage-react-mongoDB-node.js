@@ -14,6 +14,14 @@ export default function App() {
     const [totalPages, setTotalPages] = useState(1);
     const [search, setSearch] = useState("");
     const [sortBy, setSortBy] = useState("newest");
+    const [debouncedSearch, setDebouncedSearch] = useState(search);
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            setDebouncedSearch(search);
+        }, 700);
+        return () => clearTimeout(timeout);
+    }, [search]);
 
     const getFiles = useCallback(async () => {
         try {
@@ -24,7 +32,7 @@ export default function App() {
                     params: {
                         page: currentPage,
                         limit: 8,
-                        search,
+                        debouncedSearch,
                         sort: sortBy
                     }
                 }
@@ -37,7 +45,7 @@ export default function App() {
         } finally {
             setLoading(false);
         }
-    }, [currentPage, search, sortBy]);
+    }, [currentPage, debouncedSearch, sortBy]);
 
     useEffect(() => {
         getFiles()
