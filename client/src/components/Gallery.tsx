@@ -63,10 +63,7 @@ const Gallery = ({galleryFiles, loading, getFiles, search, setSearch, sortBy, se
                 <option value="audio">Audio</option>
                 <option value="image">Images</option>
                 <option value="video">Video</option>
-                <option value="text">Doc</option>
-                <option value="pdf">PDF</option>
-                <option value="wordprocessingml.document">Microsoft Word</option>
-                <option value="presentationml.presentation">Presentation</option>
+                <option value="document">Document</option>
             </select>
 
             <select value={sortBy} name='sortBy' onChange={(e) => setSortBy(e.target.value)} className="border rounded p-2 mx-6 px-5">

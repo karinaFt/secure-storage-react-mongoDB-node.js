@@ -109,9 +109,38 @@ app.get("/files", async (req, res) => {
             };
         }
 
-        if (type !== "all") {
+        const mimeTypes = {
+            image: [
+                "image/jpeg",
+                "image/png",
+                "image/webp",
+                "image/gif",
+                "image/avif"
+            ],
+
+            video: [
+                "video/mp4",
+                "video/quicktime",
+                "video/webm"
+            ],
+
+            audio: [
+                "audio/mpeg",
+                "audio/wav"
+            ],
+
+            document: [
+                "application/pdf",
+                "text/plain",
+                "application/msword",
+                "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+            ]
+        };
+
+        if (type !== "all" && mimeTypes[type]) {
             query.mimetype = {
-                $regex: `^${type}`
+                $in: mimeTypes[type]
             };
         }
 
